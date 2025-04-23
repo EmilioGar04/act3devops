@@ -1,0 +1,55 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI and Deploy to GitHub Pages
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push to the "main" branch
+  push:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build-and-deploy:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # --- Aquí irán los pasos para construir tu sitio web (si es necesario) ---
+      # Ejemplo para un sitio estático sin build:
+      - name: Prepare static files for deployment
+        run: |
+          mkdir -p public
+          cp -r * public/
+          # Si tienes archivos o carpetas específicas que no quieres desplegar,
+          # puedes usar 'rm -rf <archivo o carpeta>' para eliminarlos de 'public/'
+
+      # Ejemplo para construir un sitio con Node.js (Next.js, Gatsby, etc.):
+      # - name: Set up Node.js
+      #   uses: actions/setup-node@v3
+      #   with:
+      #     node-version: '18.x' # Especifica tu versión de Node.js
+      # - name: Install dependencies
+      #   run: npm install
+      # - name: Build website
+      #   run: npm run build # O el comando de build de tu proyecto
+      # - name: Export static output (si es necesario)
+      #   run: npm run export # Ejemplo para Next.js, asegúrate de que la salida esté en 'public/'
+      #   # Si tu build genera los archivos en una carpeta diferente a 'public/',
+      #   # ajusta el paso anterior o el valor de 'folder' en el paso de deploy.
+
+      # Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          token: ${{ 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 }}
+          branch: gh-pages # La rama donde se desplegará GitHub Pages
+          folder: public # La carpeta con los archivos de tu sitio web construidos
